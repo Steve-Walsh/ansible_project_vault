@@ -1,0 +1,19 @@
+---
+  - name: Update cache filess
+    apt: update_cache=yes cache_valid_time=3600
+
+  - name: Install haproxy
+    apt: name=haproxy state=present
+
+  - name: configure the haproxy.cfg file
+    template:
+      src: "haproxy.cfg.j2"
+      dest: "/etc/haproxy/haproxy.cfg"
+
+
+  - name: enable haproxy
+    replace:
+      dest='/etc/default/haproxy'
+      regexp='ENABLED=0'
+      replace='ENABLED=1'
+    notify: restart haproxy
